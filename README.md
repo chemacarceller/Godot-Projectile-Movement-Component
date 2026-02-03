@@ -1,4 +1,4 @@
-# GODOT-Projectile-Movement_Component
+# Godot-Projectile-Movement_Component
 
 This is the development of a projectile movement component designed to be attached to a StaticBody3D
 
