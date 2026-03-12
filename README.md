@@ -14,7 +14,7 @@ The same demo is available for First Person Character in https://jocarpe.itch.io
 
 ===================================================================
 
-Este componente también se ha probado en https://jocarpe.itch.io/third-person-character-demo
+Esto es el desarrollo de un componente de movimiento para un proyectil diseñado para ser enlazado a un StaticBody3D
 
 Este componente se ha probado en https://jocarpe.itch.io/third-person-character-demo
 
