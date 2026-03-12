@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddj0dhxik1gp8"]
-
-[ext_resource type="Script" uid="uid://b5jlk28t3rivc" path="res://addons/prmc/basic_projectile_movement_stb.gd" id="1_fcadt"]
-
-[node name="BasicProjectileMovement" type="Node"]
-script = ExtResource("1_fcadt")
