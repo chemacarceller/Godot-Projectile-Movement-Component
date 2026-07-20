@@ -1,14 +1,16 @@
 #include "ProjectileMovementComponent.h"
+
+// It provides the interface to ClassDB, Godot's internal database of all registered classes
 #include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
-// Registro de propiedades y métodos en el motor
+
 void ProjectileMovementComponent::_bind_methods() {
-    // Registro de métodos (requerido para las propiedades)
-    ClassDB::bind_method(D_METHOD("set_IsEnabled", "value"), &ProjectileMovementComponent::set_is_enabled);
-    ClassDB::bind_method(D_METHOD("get_IsEnabled"), &ProjectileMovementComponent::get_is_enabled);
+    
+    // Record of methods for Godot to see
+    ClassDB::bind_method(D_METHOD("set_enabled", "value"), &ProjectileMovementComponent::set_enabled);
+    ClassDB::bind_method(D_METHOD("is_enabled"), &ProjectileMovementComponent::is_enabled);
     
     ClassDB::bind_method(D_METHOD("set_direction", "value"), &ProjectileMovementComponent::set_direction);
     ClassDB::bind_method(D_METHOD("get_direction"), &ProjectileMovementComponent::get_direction);
@@ -16,65 +18,70 @@ void ProjectileMovementComponent::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_speed", "value"), &ProjectileMovementComponent::set_speed);
     ClassDB::bind_method(D_METHOD("get_speed"), &ProjectileMovementComponent::get_speed);
 
-    // Exponer propiedades al Inspector de Godot (@export)
-    ClassDB::add_property("ProjectileMovementComponent", PropertyInfo(Variant::BOOL, "_IsEnabled"), "set_IsEnabled", "get_IsEnabled");
-    ClassDB::add_property("ProjectileMovementComponent", PropertyInfo(Variant::VECTOR3, "direction"), "set_direction", "get_direction");
-    ClassDB::add_property("ProjectileMovementComponent", PropertyInfo(Variant::FLOAT, "speed"), "set_speed", "get_speed");
+    // Exporting properties (equivalent to @export)
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "_isEnabled"), "set_enabled", "is_enabled");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "_speed"), "set_speed", "get_speed");
 }
 
-// Constructor con valores por defecto
-ProjectileMovementComponent::ProjectileMovementComponent() {
-    _IsEnabled = true;
-    direction = Vector3(0.0f, 0.0f, 0.0f);
-    speed = 0.0f;
-    _myActor = nullptr;
-}
+
+// Constructor and Destructor
+ProjectileMovementComponent::ProjectileMovementComponent() {}
 
 ProjectileMovementComponent::~ProjectileMovementComponent() {}
 
-// Equivalente al bloque @onready de tu script
+
+// Called when the node enters the scene tree for the first time.
 void ProjectileMovementComponent::_ready() {
-    // Intenta obtener el nodo padre mapeado como un Area3D
-    _myActor = Object::cast_to<Area3D>(get_parent());
     
-    if (_myActor == nullptr) {
-        UtilityFunctions::push_warning("ProjectileMovementComponent: El nodo padre no es un Area3D o es nulo.");
-    }
+    // Equivalent to @onready var parentActor = get_parent()
+    parentActor = Object::cast_to<Node3D>(get_parent());
 }
 
-// Procesamiento físico por cuadro
 void ProjectileMovementComponent::_physics_process(double delta) {
-    if (_IsEnabled && _myActor != nullptr) {
-        Vector3 current_pos = _myActor->get_global_position();
-        // En C++ delta es un double, realizamos la multiplicación escalar
-        Vector3 new_pos = current_pos + (direction * speed * static_cast<float>(delta));
-        _myActor->set_global_position(new_pos);
+
+    if (_isEnabled && parentActor != nullptr) {
+
+        Vector3 current_pos = parentActor->get_global_position();
+
+        // In C++, delta is a double; we perform the scalar multiplication.
+        Vector3 new_pos = current_pos + (direction * _speed * static_cast<float>(delta));
+        parentActor->set_global_position(new_pos);
     }
 }
 
-// Implementación de Getters y Setters con la lógica de GDScript
-void ProjectileMovementComponent::set_is_enabled(const bool value) {
-    _IsEnabled = value;
-}
 
-bool ProjectileMovementComponent::get_is_enabled() const {
-    return _IsEnabled;
-}
+// Implementation of Getters and Setters
+void ProjectileMovementComponent::set_enabled(const bool value) { _isEnabled = value; }
 
-void ProjectileMovementComponent::set_direction(const Vector3 value) {
-    if (value != Vector3(0.0f, 0.0f, 0.0f)) {
-        direction = value.normalized();
+bool ProjectileMovementComponent::is_enabled() const { return _isEnabled; }
+
+void ProjectileMovementComponent::set_direction(const Vector3 value) { if (value != Vector3(0.0f, 0.0f, 0.0f)) { direction = value.normalized(); }}
+
+Vector3 ProjectileMovementComponent::get_direction() const { return direction; }
+
+void ProjectileMovementComponent::set_speed(const float value) { _speed = value; }
+
+float ProjectileMovementComponent::get_speed() const { return _speed; }
+
+
+// This method is called when the node receives a notification. In this case, it listens for the NOTIFICATION_WM_CLOSE_REQUEST notification, which is sent when the window is requested to close. When this notification is received, the component calls queue_free() to free itself from memory, ensuring proper cleanup.
+void ProjectileMovementComponent::_notification(int p_what) {
+
+    // Handle the close request notification to ensure that the node is properly freed when the window is closed. This prevents potential memory leaks and ensures that the component is cleaned up correctly when the game is exited.
+    if (p_what == NOTIFICATION_WM_CLOSE_REQUEST) {
+
+        if (parentActor != nullptr) {
+
+            // Get the unique ID that Godot assigned to this instance
+            uint64_t instance_id = parentActor->get_instance_id();
+
+            // Check with ObjectDB if that instance still exists in memory
+            if (ObjectDB::get_instance(ObjectID(instance_id)) != nullptr) {
+
+                // Free the node when the window close request is received. This ensures that the component is properly cleaned up and does not persist in memory after the game is closed.
+                parentActor->queue_free();
+                parentActor = nullptr;
+            }
+        }
     }
-}
-
-Vector3 ProjectileMovementComponent::get_direction() const {
-    return direction;
-}
-
-void ProjectileMovementComponent::set_speed(const float value) {
-    speed = value;
-}
-
-float ProjectileMovementComponent::get_speed() const {
-    return speed;
 }
