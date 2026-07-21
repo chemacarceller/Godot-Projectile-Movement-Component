@@ -20,7 +20,7 @@ void ProjectileMovementComponent::_bind_methods() {
 
     // Exporting properties (equivalent to @export)
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "_isEnabled"), "set_enabled", "is_enabled");
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "_speed"), "set_speed", "get_speed");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "_speed"), "set_speed", "get_speed");
 }
 
 

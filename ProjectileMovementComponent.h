@@ -61,4 +61,4 @@ class ProjectileMovementComponent : public Node {
         float get_speed() const;
 };
 
-#endif // BASIC_PROJECTILE_MOVEMENT_COMPONENT_H
+#endif
