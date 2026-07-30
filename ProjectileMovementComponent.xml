@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ProjectileMovementComponent" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_direction" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="set_direction">
+			<return type="void" />
+			<param index="0" name="value" type="Vector3" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="_isEnabled" type="bool" setter="set_enabled" getter="is_enabled" default="true">
+		Indicates if the component is enabled or not
+		</member>
+		<member name="_speed" type="float" setter="set_speed" getter="get_speed" default="0.0">
+		Speed ​​at which the projectile moves
+		</member>
+	</members>
+</class>
