@@ -50,20 +50,6 @@ void ProjectileMovementComponent::_physics_process(double delta) {
 }
 
 
-// Implementation of Getters and Setters
-void ProjectileMovementComponent::set_enabled(const bool value) { _isEnabled = value; }
-
-bool ProjectileMovementComponent::is_enabled() const { return _isEnabled; }
-
-void ProjectileMovementComponent::set_direction(const Vector3 value) { if (value != Vector3(0.0f, 0.0f, 0.0f)) { direction = value.normalized(); }}
-
-Vector3 ProjectileMovementComponent::get_direction() const { return direction; }
-
-void ProjectileMovementComponent::set_speed(const float value) { _speed = value; }
-
-float ProjectileMovementComponent::get_speed() const { return _speed; }
-
-
 // This method is called when the node receives a notification. In this case, it listens for the NOTIFICATION_WM_CLOSE_REQUEST notification, which is sent when the window is requested to close. When this notification is received, the component calls queue_free() to free itself from memory, ensuring proper cleanup.
 void ProjectileMovementComponent::_notification(int p_what) {
 

@@ -51,14 +51,14 @@ class ProjectileMovementComponent : public Node {
         void _notification(int what);
 
         // Getters and setters for the properties
-        void set_enabled(const bool value);
-        bool is_enabled() const;
+        void set_enabled(const bool value) { _isEnabled = value; }
+        bool is_enabled() const { return _isEnabled; }
 
-        void set_direction(const Vector3 value);
-        Vector3 get_direction() const;
+        void set_direction(const Vector3 value){ if (value != Vector3(0.0f, 0.0f, 0.0f)) { direction = value.normalized(); }}
+        Vector3 get_direction() const{ return direction; }
 
-        void set_speed(const float value);
-        float get_speed() const;
+        void set_speed(const float value){ _speed = value; }
+        float get_speed() const{ return _speed; }
 };
 
 #endif
