@@ -55,7 +55,7 @@ class ProjectileMovementComponent : public Node {
         bool is_enabled() const { return _isEnabled; }
 
         void set_direction(const Vector3 value){ if (value != Vector3(0.0f, 0.0f, 0.0f)) { direction = value.normalized(); }}
-        Vector3 get_direction() const{ return direction; }
+        Vector3 get_direction() const{ return direction.normalized(); }
 
         void set_speed(const float value){ _speed = value; }
         float get_speed() const{ return _speed; }
